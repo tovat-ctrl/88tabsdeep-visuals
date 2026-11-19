@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- EDIT: report title (shows in the browser tab and link previews) -->
+  <title>Report Title — 88 Tabs Deep</title>
+  <meta name="description" content="EDIT: one-sentence summary of this report.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono&display=swap">
+  <!-- Shared brand styles: two folders up from /reports/your-report/ -->
+  <link rel="stylesheet" href="../../assets/style.css">
+  <!-- Chart library (only needed if this report has a chart) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="wrap tabs" aria-label="Site">
+      <a class="tab" href="../../">88 Tabs Deep</a>
+      <!-- EDIT: short name of this report -->
+      <span class="tab active">Report title</span>
+      <span class="tab ghost" aria-hidden="true">source #12…</span>
+    </nav>
+  </header>
+
+  <main class="wrap report">
+
+    <!-- 1. THE QUESTION -->
+    <section>
+      <p class="eyebrow">Topic · Subtopic</p>
+      <h1>The question that started this rabbit hole?</h1>
+      <p class="dek">One or two sentences on why this matters and who it's for.</p>
+      <p class="meta">Published Month DD, YYYY · Data as of Month YYYY</p>
+    </section>
+
+    <!-- 2. THE KEY FINDING -->
+    <section class="finding">
+      <h2>Bottom line</h2>
+      <p>The main takeaway in plain language. If someone reads only this box, what should they know?</p>
+    </section>
+
+    <!-- 3. THE VISUAL -->
+    <section class="section">
+      <h2>Chart heading that states the point</h2>
+      <div class="visual">
+        <div class="chart-box"><canvas id="chart1" aria-label="Describe the chart for screen readers"></canvas></div>
+        <p class="caption">Source: Organization name, dataset, year.</p>
+      </div>
+    </section>
+
+    <!-- 3b. OPTIONAL TABLE (delete if not needed) -->
+    <section class="section">
+      <h2>The numbers</h2>
+      <div class="visual table-box">
+        <table>
+          <thead><tr><th>Item</th><th>Value</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Example row</td><td class="num">42%</td><td>Short note</td></tr>
+            <tr><td>Example row</td><td class="num">17%</td><td>Short note</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. HOW TO READ IT -->
+    <section class="section prose">
+      <h2>How to read this</h2>
+      <p>Explain what the chart shows, what it doesn't, and any caveats (small samples, data gaps, year mismatches).</p>
+    </section>
+
+    <!-- 5. SOURCES -->
+    <section class="section sources prose">
+      <h2>Sources</h2>
+      <ol>
+        <li><a href="https://example.org">Source title</a>, Publisher, Year.</li>
+        <li><a href="https://example.org">Source title</a>, Publisher, Year.</li>
+      </ol>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <!-- EDIT: link to the matching Substack post -->
+      <a href="https://YOURNAME.substack.com/p/post-slug">← Read the full post on Substack</a>
+      <a class="btn" href="https://YOURNAME.substack.com/subscribe">Subscribe</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ===== CHART DATA — EDIT HERE =====
+       Replace the labels and numbers below. Delete this whole <script>
+       block (and the chart section above) if the report has no chart. */
+    const labels = ["Category A", "Category B", "Category C", "Category D"];
+    const values = [42, 17, 28, 9];
+    const seriesName = "Sample data — replace";
+
+    const css = getComputedStyle(document.documentElement);
+    const color = name => css.getPropertyValue(name).trim();
+    Chart.defaults.font.family = color("--font-body");
+    Chart.defaults.color = color("--muted");
+    Chart.defaults.borderColor = color("--line");
+
+    new Chart(document.getElementById("chart1"), {
+      type: "bar",            // also try: "line", "doughnut", "scatter"
+      data: {
+        labels,
+        datasets: [{ label: seriesName, data: values, backgroundColor: color("--accent"), borderRadius: 4 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, ticks: { callback: v => v + "%" } } }
+      }
+    });
+  </script>
+</body>
+</html>

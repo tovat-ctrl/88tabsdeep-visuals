@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hybrid & NYC-Area JD Programs — 88 Tabs Deep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: docket-style working table — header + summary, sticky filter bar, sortable table that stacks into cards on phones */
+:root{
+  --bg:#f5f7fa; --surface:#ffffff; --fg:#18202e; --muted:#5b6678; --line:#dde3ec;
+  --accent:#1f5f8b; --accent-soft:#e3eef6;
+  --yes:#1d7a4f; --yes-soft:#e2f3ea; --no:#6b7280; --no-soft:#eef0f3; --warn:#9a5b00; --warn-soft:#fdf1dc;
+  --f-display:"Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --f-body:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141c; --surface:#161d28; --fg:#e6ebf2; --muted:#9aa6b8; --line:#273142;
+  --accent:#6fb2e0; --accent-soft:#1b2c3c;
+  --yes:#5fd39a; --yes-soft:#163527; --no:#a3acb9; --no-soft:#222a36; --warn:#f0b35c; --warn-soft:#3a2c14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141c; --surface:#161d28; --fg:#e6ebf2; --muted:#9aa6b8; --line:#273142;
+  --accent:#6fb2e0; --accent-soft:#1b2c3c;
+  --yes:#5fd39a; --yes-soft:#163527; --no:#a3acb9; --no-soft:#222a36; --warn:#f0b35c; --warn-soft:#3a2c14; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-0.01em}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 6px}
+.lede{color:var(--muted);max-width:68ch;margin:8px 0 0}
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 14px;display:flex;align-items:baseline;gap:8px}
+.stat b{font-family:var(--f-display);font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.callouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.callout{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.callout h2{font-family:var(--f-display);font-size:14px;margin:0 0 4px}
+.callout p{margin:0;color:var(--muted);font-size:13px}
+.callout.warn{background:var(--warn-soft);border-color:transparent}
+.callout.warn h2{color:var(--warn)}
+.callout.warn p{color:var(--fg)}
+.bar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:13px;border:0;background:transparent;color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface);font-weight:600}
+.seg button:focus-visible,.toggle input:focus-visible,#q:focus-visible,th button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer}
+.toggle input{accent-color:var(--yes);width:16px;height:16px;margin:0}
+#q{font:inherit;font-size:13px;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;flex:1 1 200px;min-width:0}
+.count{font-size:12px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.tablebox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);padding:0;white-space:nowrap;background:var(--surface)}
+th button{all:unset;display:block;padding:10px 12px;cursor:pointer}
+th button::after{content:"";margin-left:4px}
+th[aria-sort="ascending"] button::after{content:"↑"}
+th[aria-sort="descending"] button::after{content:"↓"}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tr.grp td{background:var(--accent-soft);font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);padding:8px 12px}
+.school{font-weight:600}
+.prog{color:var(--muted);font-size:12px}
+.mono{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.y{background:var(--yes-soft);color:var(--yes)}
+.chip.n{background:var(--no-soft);color:var(--no)}
+.fmt{font-size:12px;white-space:nowrap}
+.note{color:var(--muted);font-size:12px;max-width:34ch}
+.tu{font-size:12px;max-width:24ch}
+.na{color:var(--muted);font-style:italic;font-size:12px}
+.bp{display:flex;flex-direction:column;gap:3px;min-width:110px}
+.meter{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden;width:100%;max-width:120px}
+.meter i{display:block;height:100%;background:var(--accent)}
+.vs{font-size:11px;white-space:nowrap}
+.vs.up{color:var(--yes)}
+.vs.down{color:var(--warn)}
+.flag{color:var(--warn);font-weight:600}
+.sources{font-size:12px;color:var(--muted)}
+.sources h2{font-family:var(--f-display);font-size:14px;color:var(--fg);margin:0 0 6px}
+.sources ul{margin:0;padding-left:18px;display:grid;gap:3px}
+.sources a{color:var(--accent)}
+@media (max-width:760px){
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  .tablebox{background:transparent;border:0;overflow:visible}
+  tbody{display:flex;flex-direction:column;gap:10px}
+  tr.row{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
+  tr.row td{border:0;padding:0;min-width:0}
+  tr.row td::before{content:attr(data-l);display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  tr.row td.c-school{grid-column:1/-1}
+  tr.row td.c-school::before{display:none}
+  tr.row td.c-note{grid-column:1/-1}
+  tr.row td.c-note:empty{display:none}
+  .note{max-width:none}
+  tr.grp td{border-radius:8px}
+  .count{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body{margin:0}
+.back{font-size:13px;color:var(--accent);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="../../">← All 88 Tabs Deep reports</a>
+  <header>
+    <p class="eyebrow">Fall 2027 entry · compiled Nov 11, 2026</p>
+    <h1>Hybrid, Online &amp; NYC-Area Law Schools</h1>
+    <p class="lede">Every ABA-approved hybrid or online JD program found, plus every law school in New York State and within commuting range of NYC. Each row shows program length, the posted fall 2027 application deadline, and whether the school holds an ABA variance to accept JD-Next instead of the LSAT/GRE.</p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="callouts">
+    <div class="callout warn">
+      <h2>New York bar limit on online credits</h2>
+      <p>New York caps distance-education credit at 15 and allows none in the first 28 credits. Graduates of most hybrid and online programs must petition the NY Court of Appeals for a waiver before sitting for the NY bar. Confirm each program's track record with these waivers.</p>
+    </div>
+    <div class="callout">
+      <h2>What "JD-Next: Yes" means</h2>
+      <p>The school holds an ABA variance to admit with a JD-Next score alone. Policies still vary; some schools treat it as a supplement and prefer an LSAT. "No" means no variance; you can still send JD-Next as an addendum alongside an LSAT or GRE.</p>
+    </div>
+    <div class="callout">
+      <h2>Tuition and bar pass rates</h2>
+      <p>Tuition is shown as each school publishes it: per year, per semester or per credit, with the academic year. "ABA 509" figures come from schools' required ABA disclosures and may be a year behind. Bar pass is the 2025 first-time rate for the whole school, residential and online students combined, compared with the average for the state where graduates tested.</p>
+    </div>
+    <div class="callout">
+      <h2>Reading the deadlines</h2>
+      <p>Most schools admit on a rolling basis, so priority dates matter for scholarships. A <span class="flag">†</span> marks a school-wide date where the online or hybrid track may run on its own calendar.</p>
+    </div>
+  </div>
+
+  <div class="bar" role="toolbar" aria-label="Filters">
+    <div class="seg" id="seg">
+      <button type="button" id="f-all" data-v="all" aria-pressed="true">All</button>
+      <button type="button" id="f-hy" data-v="hy" aria-pressed="false">Hybrid &amp; online</button>
+      <button type="button" id="f-ny" data-v="ny" aria-pressed="false">NY &amp; commutable</button>
+    </div>
+    <label class="toggle" for="jdn"><input type="checkbox" id="jdn"> Accepts JD-Next only</label>
+    <input type="search" id="q" placeholder="Search school, city, program…" aria-label="Search">
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="tablebox">
+    <table>
+      <thead><tr id="hdr"></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+
+  <section class="sources">
+    <h2>Sources</h2>
+    <ul>
+      <li>JD-Next variance list (68 schools, through Aug 2026): <a href="https://jdnext.org/for-schools/jd-next-variance-schools/">jdnext.org</a></li>
+      <li>Fall 2027 deadlines, verified from school sites Sept 2026: <a href="https://blog.blueprintprep.com/lsat/law-school-application-deadlines/">Blueprint Prep</a></li>
+      <li>2025 first-time bar passage (ABA data): <a href="https://taxprofblog.aals.org/2026/05/10/law-school-rankings-by-first-time-bar-passage-rate-class-of-2025/">TaxProf Blog rankings</a></li>
+      <li>NY-area tuition from ABA 509 disclosures: <a href="https://lsd.law/schools/in/new-york">LSD.Law</a>. Official 2026–27 tuition pages: <a href="https://www.albanylaw.edu/applications-admissions/cost-attendance-flex-juris-doctor-jd-students">Albany Flex</a>, <a href="https://law.northeastern.edu/admissions/flexjd/tuition-and-budgeting">Northeastern</a>, <a href="https://wne.edu/law/cost-and-aid/juris-doctor">Western New England</a>, <a href="https://www.unh.edu/business-services/tuition-fees/unh-franklin-pierce-school-law-tuition-fees">UNH</a>, <a href="https://law.seattleu.edu/student-life/student-services/student-financial-services/tuition-and-fees">Seattle</a>, <a href="https://law.syracuse.edu/financial-aid/cost-of-attendance-jdinteractive">Syracuse JDi</a>, <a href="https://www.suffolk.edu/about/directory/student-account-services/tuition-fees/tuition-rates-2026-27">Suffolk</a>, <a href="https://www.swlaw.edu/node/221">Southwestern</a>, <a href="https://law.hawaii.edu/admissions/tuition/">Hawaiʻi</a>, <a href="https://www.luc.edu/bursar/tuitionfees/2026-2027/law/">Loyola Chicago</a>, <a href="https://mitchellhamline.edu/student-finances/tuition-page/2026-27-tuition-and-fees/">Mitchell Hamline</a>, <a href="https://www.stcl.edu/admissions/tuition-and-fees/">South Texas</a>, <a href="https://law.asu.edu/degree-programs/jd-online-new">ASU</a>, <a href="https://case.edu/law/admissions/jd-admissions/jd-tuition-and-aid">Case Western</a>, <a href="https://law.udmercy.edu/students/financial-aid1/tuition-cost-of-attendance.php">Detroit Mercy</a>, <a href="https://law.onu.edu/tuition-and-financial-aid">Ohio Northern</a>, <a href="https://law.stmarytx.edu/?p=2110">St. Mary's</a>, <a href="https://www.law.csuohio.edu/admissions/financing/tuition">Cleveland State</a>, <a href="https://law.rutgers.edu/cost">Rutgers</a>, <a href="https://law.shu.edu/financial-aid/tuition-and-fees.html">Seton Hall</a>, <a href="https://catalog.yale.edu/law/admissions-expenses-financial-aid/">Yale</a>, <a href="https://law.uconn.edu/student-life/tuition-and-financial-aid/tuition-fees-and-cost-of-attendance/">UConn</a>, <a href="https://law.qu.edu/tuition-and-financial-aid/costs-and-budgets">Quinnipiac</a>, <a href="https://www.tourolaw.edu/admissions/31">Touro</a></li>
+      <li>Early decision dates: <a href="https://ingeniusprep.com/blog/law-schools-with-early-decision/">InGenius Prep</a></li>
+      <li>ABA distance-education JD report (21 schools, Feb 2026): <a href="https://taxprofblog.aals.org/2026/09/27/21-law-schools-offer-online-jd-degrees/">TaxProf Blog</a></li>
+      <li>Quinnipiac 3-Year Evening JD: <a href="https://taxprofblog.aals.org/2026/09/12/quinnipiac-launches-three-year-evening-jd/">TaxProf Blog</a> · Touro Montana hybrid: <a href="https://www.abajournal.com/news/article/touro-law-to-expand-to-montana-with-hybrid-program">ABA Journal</a> · Elon Flex: <a href="https://www.abajournal.com/news/article/elon-university-gets-nod-from-legal-ed-council-to-move-forward-on-merger">ABA Journal</a> · NIU Naperville: <a href="https://www.abajournal.com/news/article/high-point-northern-illinois-law-schools-get-nod-from-legal-ed-council">ABA Journal</a></li>
+      <li>NY distance-education rule: <a href="https://www.law.cuny.edu/wp-content/uploads/page-assets/it/distance-learning/Distance-Education-Policy-3_24_26.pdf">CUNY Law policy (Mar 2026)</a>, <a href="https://nybarexam.org/Eligible/Eligibility.htm">NY Board of Law Examiners</a>, <a href="https://www.nycourts.gov/CTAPPs/admattrnyfaq.html">NY Court of Appeals waiver FAQ</a></li>
+      <li>Hybrid program lengths: your earlier program comparison, drawn from ConnectPrep and the ABA distance-education list. Part-time lengths for residential schools are each school's standard schedule; confirm before applying.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const D = [
+ // Hybrid & fully online (national)
+ ["hy","Arizona State University","JD, Part-Time & Online","Fully online","Tempe, AZ","National","3.5–4 yrs",3.75,"Priority Feb 28 · Final Jul 31†",20270228,"Y",""],
+ ["hy","Case Western Reserve University","Online JD","Fully online","Cleveland, OH","National","4–4.5 yrs",4.25,"Priority Mar 1 · Final Apr 1†",20270301,"Y",""],
+ ["hy","University of Detroit Mercy","Online JD","Fully online","Detroit, MI","National","4 yrs",4,"Priority Feb 15 · Final Aug 1†",20270215,"N",""],
+ ["hy","University of Hawaiʻi at Mānoa","Hawaiʻi Online JD","Fully online","Honolulu, HI","National","4 yrs",4,"Priority Feb 3 · Final May 1†",20270203,"N",""],
+ ["hy","Ohio Northern University","Online JD","Fully online","Ada, OH","National","4 yrs (11 semesters)",4,"Rolling until full",99999999,"N",""],
+ ["hy","St. Mary's University","Online JD","Fully online","San Antonio, TX","National","~4 yrs",4,"Mar 1 (space-available after)†",20270301,"Y","First ABA-approved fully online JD."],
+ ["hy","Southwestern Law School","Online JD","Fully online","Los Angeles, CA","National","3 yrs FT · 4 yrs PT",3,"Apr 1†",20270401,"N","One of two DE programs with a full-time track."],
+ ["hy","Suffolk University","Advanced Professional Online JD","Fully online","Boston, MA","National","4 yrs",4,"Priority Apr 1†",20270401,"Y","New fully online part-time track."],
+ ["hy","Suffolk University","Hybrid Online JD","Hybrid","Boston, MA","National","3 yrs FT · 3.5–4 yrs PT",3,"Priority Apr 1†",20270401,"Y",""],
+ ["hy","Albany Law School","Flex JD","Hybrid","Albany, NY","Upstate NY","3 yrs, 3 mo",3.25,"Priority Mar 15 · Final Aug 1 (prior-cycle dates; confirm)",20270315,"N","Actively helps grads with NY bar waiver petitions."],
+ ["hy","Cleveland State University","Online JD","Hybrid","Cleveland, OH","National","As little as 3 yrs, 5 mo",3.42,"Online JD: May 1",20270501,"Y",""],
+ ["hy","University of Dayton","Online Hybrid JD","Hybrid","Dayton, OH","National","3 yrs, 8 mo",3.67,"Hybrid final: Jun 11",20270611,"Y",""],
+ ["hy","Lincoln Memorial University","Part-Time/Hybrid JD","Hybrid","Knoxville, TN","National","4 yrs",4,"Priority Mar 15 · Final Jul 1†",20270315,"N",""],
+ ["hy","Loyola University Chicago","Weekend JD","Hybrid","Chicago, IL","National","4 yrs",4,"Priority Mar 1 · Final May 1†",20270301,"N",""],
+ ["hy","Mitchell Hamline School of Law","Blended Learning JD","Hybrid","St. Paul, MN","National","3 yrs (with summers) · 4 yrs",3,"Jul 15†",20270715,"N","Requires on-campus capstone weeks."],
+ ["hy","University of Nevada, Las Vegas","Part-Time Hybrid Program","Hybrid","Las Vegas, NV","National","4 yrs",4,"Mar 15†",20270315,"N","First class enters fall 2027."],
+ ["hy","UNH Franklin Pierce","Hybrid JD","Hybrid","Concord, NH","National","3.5 yrs (10 semesters)",3.5,"Priority Mar 15 · Final Jul 15†",20270315,"N","Tracks in IP/tech law or health & life sciences."],
+ ["hy","Northeastern University","FlexJD","Hybrid","Boston, MA","National","4 yrs",4,"Mar 1 (space-available after)†",20270301,"N",""],
+ ["hy","Rutgers Law School","Online JD","Hybrid","Newark / Camden, NJ","NJ","~4 yrs",4,"Jul 1†",20270701,"N","First class enters 2027."],
+ ["hy","Seattle University","Flex JD","Hybrid","Seattle, WA","National","3.5 yrs",3.5,"Priority Mar 1 · Final Jul 1†",20270301,"Y",""],
+ ["hy","South Texas College of Law Houston","Part-Time/Online JD","Hybrid","Houston, TX","National","4 yrs",4,"Priority Feb 5 · Final May 7†",20270205,"N",""],
+ ["hy","Syracuse University","JDinteractive (JDi)","Hybrid","Syracuse, NY","Upstate NY","~4 yrs",4,"Not in posted lists; check JDi admissions",99999998,"Y","Holds variance but has treated JD-Next as a supplement to the LSAT. Helps grads with NY bar waivers."],
+ ["hy","Vermont Law & Graduate School","Online Hybrid JD","Hybrid","South Royalton, VT","National","As little as 3 yrs, 1 semester",3.17,"Apr 15 (rolling after)†",20270415,"N","Only two short residencies."],
+ ["hy","Western New England University","JD Access","Hybrid","Springfield, MA","National","3.5 yrs (with summers) · 4 yrs",3.5,"Priority Mar 15 · Final Jun 30†",20270315,"Y",""],
+ ["hy","Quinnipiac University","3-Year Evening JD","Hybrid (evening)","Hamden, CT","CT","3 yrs",3,"Priority early March · Final Aug 1",20270305,"N","New for fall 2027: 4 on-campus evening semesters + 5 online semesters. Ask how online credits fit NY bar rules."],
+ ["hy","Touro Law — Montana","Hybrid JD","Hybrid","Great Falls, MT","National","Not yet published",9,"Rolling (Touro)",99999999,"N","New campus; first cohort August 2027."],
+ ["hy","Elon University School of Law","Elon Law Flex (part-time)","Hybrid (evening)","Charlotte, NC","National","4 yrs",4,"Jul 15",20270715,"N","Part-time hybrid program moving to Queens Univ. campus in Charlotte."],
+ ["hy","Northern Illinois University","Part-Time JD (Naperville)","Hybrid (evening)","Naperville, IL","National","4 yrs",4,"Priority Apr 1",20270401,"N","Two evenings a week plus some weekends, in person + online. First class fall 2027."],
+ // NY & commutable — residential
+ ["ny","Brooklyn Law School","JD","In person · FT & PT","Brooklyn","NYC","3 yrs FT · 4 yrs PT",3,"Rolling until the class is full",99999999,"N",""],
+ ["ny","Cardozo School of Law (Yeshiva)","JD","In person · FT","Manhattan","NYC","3 yrs (May-start option)",3,"Fall priority Apr 1 · May-start priority Mar 15",20270401,"Y",""],
+ ["ny","Columbia Law School","JD","In person · FT","Manhattan","NYC","3 yrs",3,"Feb 15 (binding ED Nov 15, 2026)",20270215,"N",""],
+ ["ny","CUNY School of Law","JD","In person · FT & PT","Long Island City, Queens","NYC","3 yrs FT · 4 yrs PT",3,"Apr 15",20270415,"Y","Public law school with a public-interest focus."],
+ ["ny","Fordham University School of Law","JD","In person · FT & evening","Manhattan","NYC","3 yrs FT · 4 yrs evening",3,"Mar 15",20270315,"Y",""],
+ ["ny","New York Law School","JD","In person · FT & evening","Manhattan","NYC","3 yrs FT · 4 yrs evening",3,"Jun 1",20270601,"N",""],
+ ["ny","NYU School of Law","JD","In person · FT","Manhattan","NYC","3 yrs",3,"Feb 15 (binding ED Nov 15, 2026)",20270215,"N",""],
+ ["ny","St. John's University School of Law","JD","In person · FT & evening","Queens","NYC","3 yrs FT · 4 yrs evening",3,"Priority Mar 15 · Final Jul 15",20270315,"Y","JD-Next variance granted Aug 2026."],
+ ["ny","Hofstra Maurice A. Deane School of Law","JD","In person · FT & PT","Hempstead, Long Island (~1 hr LIRR)","Long Island","3 yrs FT · 4 yrs PT",3,"Priority Apr 15",20270415,"Y",""],
+ ["ny","Touro Law Center","JD","In person · FT & PT","Central Islip, Long Island (~1.5 hr LIRR)","Long Island","3 yrs FT · 4 yrs PT",3,"Rolling; apply early",99999999,"N",""],
+ ["ny","Pace Elisabeth Haub School of Law","JD","In person · FT & PT","White Plains, Westchester (~45 min Metro-North)","Westchester","3 yrs FT · 4 yrs PT",3,"Suggested Jun 1",20270601,"Y",""],
+ ["ny","Rutgers Law School (Newark)","JD","In person · FT & PT","Newark, NJ (~30–45 min PATH/NJ Transit)","NJ","3 yrs FT · 4 yrs PT",3,"Jul 1",20270701,"N",""],
+ ["ny","Seton Hall University School of Law","JD","In person · FT & PT","Newark, NJ (~30–45 min PATH/NJ Transit)","NJ","3 yrs FT · 4 yrs PT",3,"Priority Apr 1",20270401,"N",""],
+ ["ny","Yale Law School","JD","In person · FT","New Haven, CT (~1 hr 45 min Metro-North)","CT","3 yrs",3,"Feb 15",20270215,"N",""],
+ ["ny","Quinnipiac University School of Law","JD (full-time)","In person · FT","Hamden, CT (~2 hrs)","CT","3 yrs",3,"Priority early March · Final Aug 1",20270305,"N","See the new 3-Year Evening JD in the hybrid section."],
+ ["ny","UConn School of Law","JD","In person · FT & PT","Hartford, CT (~2.5 hrs)","CT","3 yrs FT · 4 yrs PT",3,"Apr 30",20270430,"N",""],
+ ["ny","Albany Law School","JD","In person · FT & PT","Albany, NY","Upstate NY","3 yrs FT · 4 yrs PT",3,"Priority Mar 15 · Final Aug 1 (prior-cycle dates; confirm)",20270315,"N","Not a daily commute. Flex JD listed in hybrid section."],
+ ["ny","University at Buffalo School of Law","JD","In person · FT","Buffalo, NY","Upstate NY","3 yrs",3,"Mar 1, rolling after",20270301,"N","Not a daily commute. SUNY public tuition."],
+ ["ny","Cornell Law School","JD","In person · FT","Ithaca, NY","Upstate NY","3 yrs",3,"Priority Mar 1 · Final Jul 1 (binding ED Jan 1)",20270301,"N","Not a daily commute."],
+ ["ny","Syracuse University College of Law","JD (residential)","In person · FT","Syracuse, NY","Upstate NY","3 yrs",3,"Not in posted lists; check school",99999998,"Y","Not a daily commute. JDi listed in hybrid section."],
+];
+// [tuition as published, approx. annual $ for sorting (99999 = not posted), 2025 first-time bar pass %, points vs. state average]
+const X={
+ "Arizona State University|JD, Part-Time & Online":["≈$120,000 total program (school estimate)",30000,91.94,13.71],
+ "Case Western Reserve University|Online JD":["Online rate not posted · residential $2,775/credit (26–27)",99999,77.46,-1.41],
+ "University of Detroit Mercy|Online JD":["$1,648/credit, school-wide JD rate (26–27)",39552,71.53,-0.36],
+ "University of Hawaiʻi at Mānoa|Hawaiʻi Online JD":["$990/credit · ≈$17,820/yr (26–27)",17820,77.08,-0.08],
+ "Ohio Northern University|Online JD":["$38,350/yr (year not stated)",38350,56.41,-23.10],
+ "St. Mary's University|Online JD":["$28,148/yr online & part-time (23–24; outdated)",28148,84.62,2.04],
+ "Southwestern Law School|Online JD":["$65,686 FT · $43,810 PT per yr (26–27)",43810,72.07,-10.60],
+ "Suffolk University|Advanced Professional Online JD":["$49,230/yr (26–27)",49230,80.75,-3.58],
+ "Suffolk University|Hybrid Online JD":["$49,230/yr part-time · $65,640 FT (26–27)",49230,80.75,-3.58],
+ "Albany Law School|Flex JD":["$59,898/yr (26–27)",59898,86.71,0.69],
+ "Cleveland State University|Online JD":["Online rate not posted · in-person $31,567 FT, OH resident (25–26)",99999,72.65,-5.37],
+ "University of Dayton|Online Hybrid JD":["Not posted; contact school",99999,87.50,8.44],
+ "Lincoln Memorial University|Part-Time/Hybrid JD":["Not posted in sources checked",99999,78.70,-1.22],
+ "Loyola University Chicago|Weekend JD":["$22,985/semester ≈ $45,970/yr (26–27)",45970,85.71,4.77],
+ "Mitchell Hamline School of Law|Blended Learning JD":["$20,670/sem PT · $28,620/sem FT (26–27)",41340,71.95,-10.98],
+ "University of Nevada, Las Vegas|Part-Time Hybrid Program":["Not posted (resident vs. nonresident rates apply)",99999,83.47,11.64],
+ "UNH Franklin Pierce|Hybrid JD":["$1,640/credit out-of-state · $1,435 NH (26–27)",39360,75.57,-3.38],
+ "Northeastern University|FlexJD":["$50,952/yr (26–27)",50952,90.52,6.25],
+ "Rutgers Law School|Online JD":["$1,368/credit NJ · $2,073 out-of-state (26–27 part-time rate)",30096,79.11,4.03],
+ "Seattle University|Flex JD":["$2,144/credit · $38,592 first year (26–27)",38592,79.51,-3.44],
+ "South Texas College of Law Houston|Part-Time/Online JD":["$32,040/yr part-time (26–27; online rate not confirmed)",32040,85.56,2.87],
+ "Syracuse University|JDinteractive (JDi)":["$2,411/credit · $53,042 fall + spring (26–27)",53042,84.77,0.97],
+ "Vermont Law & Graduate School|Online Hybrid JD":["Not posted; contact school",99999,67.91,-7.55],
+ "Western New England University|JD Access":["$40,380/yr incl. fees (26–27)",40380,null,null],
+ "Quinnipiac University|3-Year Evening JD":["Not posted yet · full-time is $58,300 (26–27)",99999,75.44,4.15],
+ "Touro Law — Montana|Hybrid JD":["Not posted",99999,null,null],
+ "Elon University School of Law|Elon Law Flex (part-time)":["Not posted in sources checked",99999,69.92,-11.47],
+ "Northern Illinois University|Part-Time JD (Naperville)":["Not posted in sources checked",99999,61.90,-18.74],
+ "Brooklyn Law School|JD":["$75,496/yr (ABA 509)",75496,85.47,-1.42],
+ "Cardozo School of Law (Yeshiva)|JD":["$74,438/yr (ABA 509)",74438,87.83,1.06],
+ "Columbia Law School|JD":["$85,368/yr (ABA 509)",85368,94.73,8.13],
+ "CUNY School of Law|JD":["$25,640/yr (ABA 509)",25640,69.04,-17.81],
+ "Fordham University School of Law|JD":["$78,078/yr (ABA 509)",78078,90.80,4.02],
+ "New York Law School|JD":["$71,052/yr (ABA 509)",71052,86.47,0.53],
+ "NYU School of Law|JD":["$83,952/yr (ABA 509)",83952,96.94,10.57],
+ "St. John's University School of Law|JD":["$75,170/yr (ABA 509)",75170,87.55,0.47],
+ "Hofstra Maurice A. Deane School of Law|JD":["$73,344/yr (ABA 509)",73344,79.17,-7.51],
+ "Touro Law Center|JD":["$63,440 FT · $2,170/credit PT (26–27)",63440,67.86,-19.22],
+ "Pace Elisabeth Haub School of Law|JD":["$56,648/yr (ABA 509)",56648,65.18,-18.87],
+ "Rutgers Law School (Newark)|JD":["$33,472 NJ · $50,736 non-resident (26–27)",33472,79.11,4.03],
+ "Seton Hall University School of Law|JD":["$71,920 FT · $53,970 PT per yr (26–27)",71920,87.13,12.75],
+ "Yale Law School|JD":["$81,818/yr incl. fees (26–27)",81818,98.54,13.14],
+ "Quinnipiac University School of Law|JD (full-time)":["≈$58,300/yr (26–27)",58300,75.44,4.15],
+ "UConn School of Law|JD":["$30,354 CT · $61,396 out-of-state (26–27)",30354,82.81,9.26],
+ "Albany Law School|JD":["$63,994/yr (ABA 509)",63994,86.71,0.69],
+ "University at Buffalo School of Law|JD":["$32,100/yr (ABA 509)",32100,88.46,1.23],
+ "Cornell Law School|JD":["$84,722/yr (ABA 509)",84722,93.68,7.88],
+ "Syracuse University College of Law|JD (residential)":["$64,650/yr (ABA 509)",64650,84.77,0.97],
+};
+D.forEach(r=>{const x=X[r[1]+"|"+r[2]]||["Not posted",99999,null,null];r.push(x[0],x[1],x[2]==null?-1:x[2],x[3]);});
+const COLS=[["school","School / program"],["fmt","Format"],["loc","Location"],["len","Est. length"],["dl","Fall 2027 deadline"],["tu","Tuition"],["bar","Bar pass (1st time, 2025)"],["jd","JD-Next"],["note","Notes"]];
+const KEY={school:1,fmt:3,loc:4,len:7,dl:9,jd:10,note:11,tu:13,bar:14};
+let state={sec:"all",jdn:false,q:"",sort:null,dir:1};
+try{const s=JSON.parse(localStorage.getItem("jdt")||"null");if(s)Object.assign(state,s,{q:""});}catch(e){}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const hdr=document.getElementById("hdr");
+hdr.innerHTML=COLS.map(([k,l])=>`<th data-k="${k}" aria-sort="none"><button type="button" id="sort-${k}">${l}</button></th>`).join("");
+hdr.addEventListener("click",e=>{const th=e.target.closest("th");if(!th)return;const k=th.dataset.k;if(state.sort===k)state.dir*=-1;else{state.sort=k;state.dir=1;}render();});
+document.getElementById("seg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.sec=b.dataset.v;render();});
+const jdn=document.getElementById("jdn");jdn.addEventListener("change",()=>{state.jdn=jdn.checked;render();});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();render();});
+function barCell(r){
+  const p=r[14],d=r[15];
+  if(p<0)return '<span class="na">Not in 2025 data</span>';
+  const cls=d>=0?"up":"down", sign=d>=0?"+":"−";
+  return `<div class="bp"><span class="mono">${p.toFixed(1)}%</span><span class="meter" aria-hidden="true"><i style="width:${Math.max(0,Math.min(100,p))}%"></i></span><span class="vs ${cls}">${sign}${Math.abs(d).toFixed(1)} vs state avg</span></div>`;
+}
+const fmtDl=s=>esc(s).replace(/†/g,'<span class="flag" title="School-wide date; online/hybrid track may differ">†</span>');
+function row(r){
+  return `<tr class="row">
+  <td class="c-school" data-l="School"><div class="school">${esc(r[1])}</div><div class="prog">${esc(r[2])}</div></td>
+  <td data-l="Format"><span class="fmt">${esc(r[3])}</span></td>
+  <td data-l="Location">${esc(r[4])}</td>
+  <td data-l="Est. length" class="mono">${esc(r[6])}</td>
+  <td data-l="Fall 2027 deadline" class="mono">${fmtDl(r[8])}</td>
+  <td data-l="Tuition" class="tu${r[13]===99999?' na':''}">${esc(r[12])}</td>
+  <td data-l="Bar pass (1st time, 2025)">${barCell(r)}</td>
+  <td data-l="JD-Next">${r[10]==="Y"?'<span class="chip y">Yes</span>':'<span class="chip n">No</span>'}</td>
+  <td class="c-note" data-l="Notes"><div class="note">${esc(r[11])}</div></td></tr>`;
+}
+function render(){
+  let rows=D.filter(r=>(state.sec==="all"||r[0]===state.sec)&&(!state.jdn||r[10]==="Y")&&(!state.q||(r[1]+" "+r[2]+" "+r[4]+" "+r[5]+" "+r[3]).toLowerCase().includes(state.q)));
+  document.querySelectorAll("#seg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===state.sec));
+  jdn.checked=state.jdn;
+  hdr.querySelectorAll("th").forEach(th=>th.setAttribute("aria-sort",th.dataset.k===state.sort?(state.dir>0?"ascending":"descending"):"none"));
+  let html="";
+  if(state.sort){
+    const i=KEY[state.sort];
+    rows=rows.slice().sort((a,b)=>{const x=a[i],y=b[i];return (typeof x==="number"?x-y:String(x).localeCompare(String(y)))*state.dir;});
+    html=rows.map(row).join("");
+  }else{
+    const groups=[["hy","Hybrid & online JD programs (ABA-approved)"],["ny","New York State & NYC-commutable law schools"]];
+    groups.forEach(([g,l])=>{const gr=rows.filter(r=>r[0]===g);if(gr.length)html+=`<tr class="grp"><td colspan="9">${l} · ${gr.length}</td></tr>`+gr.map(row).join("");});
+  }
+  document.getElementById("tb").innerHTML=html||`<tr><td colspan="9" style="padding:24px;color:var(--muted)">No programs match these filters. Clear the search or turn off "Accepts JD-Next only".</td></tr>`;
+  document.getElementById("count").textContent=`Showing ${rows.length} of ${D.length} programs`;
+  try{localStorage.setItem("jdt",JSON.stringify({sec:state.sec,jdn:state.jdn,sort:state.sort,dir:state.dir}));}catch(e){}
+}
+(function stats(){
+  const hy=D.filter(r=>r[0]==="hy").length, ny=D.filter(r=>r[0]==="ny").length, y=D.filter(r=>r[10]==="Y").length;
+  const nyY=D.filter(r=>r[0]==="ny"&&r[10]==="Y").length;
+  document.getElementById("stats").innerHTML=[[hy,"hybrid & online programs"],[ny,"NY & commutable schools"],[y,"programs accept JD-Next"],[nyY,"NY-area schools accept JD-Next"]].map(([n,l])=>`<div class="stat"><b>${n}</b><span>${l}</span></div>`).join("");
+})();
+render();
+</script>
+
+</body>
+</html>
